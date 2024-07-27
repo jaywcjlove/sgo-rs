@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Create Tag
         id: create_tag
@@ -22,16 +24,28 @@ jobs:
         id: check_success
         run: echo "success=${{ steps.create_tag.outputs.successful }}" >> $GITHUB_OUTPUT
 
-      # - name: Check if tag creation was successful
-      #   id: check_success
-      #   run: |
-      #     if [[ "${{ steps.create_tag.outputs.successful }}" == "true" ]]; then
-      #       echo "Tag creation successful"
-      #       echo "::set-output name=success::true"
-      #     else
-      #       echo "Tag creation failed"
-      #       echo "::set-output name=success::false"
-      #     fi
+      - name: Generate Changelog
+        id: changelog
+        uses: jaywcjlove/changelog-generator@main
+        if: steps.create_tag.outputs.successful == 'true'
+        with:
+          head-ref: ${{ steps.create_tag.outputs.version }}
+          filter-author: (小弟调调™|Renovate Bot)
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        if: steps.create_tag.outputs.successful == 'true'
+        with:
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ steps.create_tag.outputs.version }}
+          tag: ${{ steps.create_tag.outputs.version }}
+          body: |
+            [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-048754?logo=buymeacoffee)](https://jaywcjlove.github.io/#/sponsor)
+            
+            Comparing Changes: ${{ steps.changelog.outputs.compareurl }} 
+
+            ${{ steps.changelog.outputs.changelog }}
 
       - name: Trigger next workflow if successful
         if: steps.check_success.outputs.success == 'true'
