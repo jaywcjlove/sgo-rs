@@ -1,9 +1,10 @@
 name: Publish
 
 on:
-  push:
-    tags:
-      - "*"
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
 
 jobs:
   binary:
