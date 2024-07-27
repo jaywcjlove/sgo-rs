@@ -3,7 +3,7 @@ sgo
 
 帮助你为静态网站、单页应用程序或静态文件提供服务（无论它们是在你的设备上还是在本地网络上）。它还提供了一个整洁的界面，用于列出目录内容：
 
-![sgo](https://github.com/user-attachments/assets/76797b83-0ff4-45da-bacf-114c1af1f16d)
+<img width="557" alt="sgo" src="https://github.com/user-attachments/assets/76797b83-0ff4-45da-bacf-114c1af1f16d">
 
 ### Command help
 
