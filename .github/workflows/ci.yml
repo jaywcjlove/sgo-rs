@@ -1,5 +1,10 @@
 name: CI Pipeline
 
+# Steps:
+# 1. Run ci.yml for every push to the main branch
+# 2. Run tag.yml for every completed run of the CI Pipeline
+# 3. Run cd.yml for every tag-creation-success event
+
 on:
   push:
     branches: [ main ]
@@ -28,9 +33,3 @@ jobs:
 
         - name: Build with cross
           run: cargo build --release
-
-        - name: Create Tag
-          id: create_tag
-          uses: jaywcjlove/create-tag-action@main
-          with:
-            test: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
