@@ -8,31 +8,23 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.rust == 'nightly' }}
     strategy:
       matrix:
-        platform: [x86_64-unknown-linux-gnu, x86_64-pc-windows-gnu, x86_64-apple-darwin]
-
+        os: [ubuntu-latest, macos-latest]
+        rust: [1.66.1, stable, beta, nightly]
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+        - name: Checkout repository
+          uses: actions/checkout@v4
+     
+        - name: Run dtolnay/rust-toolchain${{contains(matrix.rust, ' ') && ' for ' || '@'}}${{matrix.rust}}
+          uses: dtolnay/rust-toolchain@stable
+          with:
+            toolchain: ${{ matrix.rust }}
 
-    - uses: helix-editor/rust-toolchain@v1
-      with:
-        profile: minimal
-    # - name: Set up Rust
-    #   uses: rust-lang/setup-rust@v2
-    #   with:
-    #     rust-version: stable
+        - name: Install cross
+          run: cargo install cross
 
-    - name: Install cross
-      run: cargo install cross
-
-    - name: Build with cross
-      run: cross build --target ${{ matrix.platform }} --release
-
-    # - name: Upload binaries
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: ${{ matrix.platform }}-binary
-    #     path: target/${{ matrix.platform }}/release/your_project_name
+        - name: Build with cross
+          run: cargo build --release
