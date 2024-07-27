@@ -3,7 +3,7 @@
 sgo
 ===
 
-This is a tool designed to help you serve static websites, single-page applications, or static files, whether they are on your device or on a local network. It is the Rust version of [sgo](https://github.com/jaywcjlove/sgo), with this new version being rewritten in Rust based on [serve](https://github.com/vercel/serve).
+This is a tool designed to help you serve static websites, single-page applications, or static files, whether they are on your device or on a local network. It is the Rust version of [sgo](https://github.com/jaywcjlove/sgo), rewritten in Rust.
 
 Additionally, it provides a neat interface for listing directory contents:
 
