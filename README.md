@@ -1,9 +1,13 @@
+[简体中文](./README-zh.md)
+
+<br />
+
 sgo
 ===
 
-这是一款工具，旨在帮助你为静态网站、单页应用程序或静态文件提供服务，无论它们是在你的设备上还是在本地网络上。它是 [sgo](https://github.com/jaywcjlove/sgo) 的 Rust 版本，这个新版工具参考了[serve](https://github.com/vercel/serve)，并基于 Rust 重新编写。
+This is a tool designed to help you serve static websites, single-page applications, or static files, whether they are on your device or on a local network. It is the Rust version of [sgo](https://github.com/jaywcjlove/sgo), with this new version being rewritten in Rust based on [serve](https://github.com/vercel/serve).
 
-此外，它还提供了一个整洁的界面，用于列出目录内容：
+Additionally, it provides a neat interface for listing directory contents:
 
 <img width="557" alt="sgo" src="https://github.com/user-attachments/assets/76797b83-0ff4-45da-bacf-114c1af1f16d">
 
@@ -31,22 +35,22 @@ Options:
 
 <br />
 
-### 开发
+### Development
 
 ```sh
-cargo run   # 运行服务器，在浏览器中打开 http://127.0.0.1:3030/
-cargo build # 编译项目
-cargo build --release # 编译输出发布版本
+cargo run   # Run the server, open http://127.0.0.1:3030/ in the browser
+cargo build # Compile the project
+cargo build --release # Compile the release version
 ```
 
-编译输出目录
+Compilation output directory
 
 ```rs
 └── target
     ├── debug
-    │   └── sgo // build 输出的二进制文件
+    │   └── sgo // Binary file output from build
     └── release
-        └── sgo // release 输出的二进制文件
+        └── sgo // Binary file output from release
 ```
 
 <br />
