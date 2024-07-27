@@ -1,7 +1,5 @@
 [English](./README.md)
 
-<br />
-
 sgo
 ===
 
