@@ -18,17 +18,20 @@ jobs:
         with:
           test: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
 
-
       - name: Check if tag creation was successful
         id: check_success
-        run: |
-          if [[ "${{ steps.create_tag.outputs.successful }}" == "true" ]]; then
-            echo "Tag creation successful"
-            echo "::set-output name=success::true"
-          else
-            echo "Tag creation failed"
-            echo "::set-output name=success::false"
-          fi
+        run: echo "success=${{ steps.create_tag.outputs.successful }}" >> $GITHUB_OUTPUT
+
+      # - name: Check if tag creation was successful
+      #   id: check_success
+      #   run: |
+      #     if [[ "${{ steps.create_tag.outputs.successful }}" == "true" ]]; then
+      #       echo "Tag creation successful"
+      #       echo "::set-output name=success::true"
+      #     else
+      #       echo "Tag creation failed"
+      #       echo "::set-output name=success::false"
+      #     fi
 
       - name: Trigger next workflow if successful
         if: steps.check_success.outputs.success == 'true'
