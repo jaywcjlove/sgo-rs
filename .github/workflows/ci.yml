@@ -22,6 +22,9 @@ jobs:
     steps:
         - name: Checkout repository
           uses: actions/checkout@v4
+
+        - name: Save commit message to environment variable
+          run: echo "COMMIT_MESSAGE=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
      
         - name: Run dtolnay/rust-toolchain${{contains(matrix.rust, ' ') && ' for ' || '@'}}${{matrix.rust}}
           uses: dtolnay/rust-toolchain@stable
