@@ -6,6 +6,7 @@ on:
 
 jobs:
   binary:
+    if: github.repository == 'jaywcjlove/sgo-rs'
     name: Publish ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -67,9 +68,12 @@ jobs:
           exclude: ".git|.github|.husky|src"
           depth: 3
 
-      - name: Upload release binaries
-        uses: alexellis/upload-assets@0.4.0
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Read Version
+        run: |
+          echo "Commit message 1: ${{ github.event.client_payload.version }}"
+          
+      - name: Upload sgo-${{ matrix.target }}
+        uses: jaywcjlove/github-action-upload-assets@main
+        continue-on-error: true
         with:
-          asset_paths: '["./target/release/sgo-*"]'
+          asset-path: '["./target/release/sgo-*"]'
