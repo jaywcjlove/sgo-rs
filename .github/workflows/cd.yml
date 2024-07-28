@@ -43,5 +43,4 @@ jobs:
         uses: jaywcjlove/github-action-folder-tree@main
         with:
           exclude: ".git|.github|.husky|src"
-          path: ./src
           depth: 2
