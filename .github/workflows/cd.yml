@@ -12,22 +12,41 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-latest
-            target: x86_64-apple-darwin
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-musl
-          - os: ubuntu-latest
-            target: x86_64-pc-windows-gnu
-          - os: ubuntu-latest
-            target: armv7-unknown-linux-musleabihf
-          - os: ubuntu-latest
-            target: armv7-linux-androideabi
-          - os: ubuntu-latest
-            target: aarch64-linux-android
-          - os: ubuntu-latest
-            target: aarch64-unknown-linux-gnu
-          - os: macos-latest
-            target: aarch64-apple-darwin
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+
+          - target: i686-unknown-linux-musl
+            os: ubuntu-latest
+
+          - target: aarch64-unknown-linux-musl
+            os: ubuntu-latest
+
+          - target: arm-unknown-linux-musleabihf
+            os: ubuntu-latest
+
+          - target: x86_64-apple-darwin
+            os: macos-latest
+
+          - target: aarch64-apple-darwin
+            os: macos-latest
+
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            rustflags: -C target-feature=+crt-static
+
+          - target: i686-pc-windows-msvc
+            os: windows-latest
+            rustflags: -C target-feature=+crt-static
+
+          - target: aarch64-pc-windows-msvc
+            os: windows-latest
+            rustflags: -C target-feature=+crt-static
+
+          - target: x86_64-unknown-freebsd
+            os: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,8 +58,18 @@ jobs:
       - name: Build
         run: cargo build --release
       
+      - name: Rename SGO
+        run: mv target/release/sgo target/release/sgo-${{ matrix.target }}
+      
       - name: Print Folder Tree
         uses: jaywcjlove/github-action-folder-tree@main
         with:
           exclude: ".git|.github|.husky|src"
           depth: 3
+
+      - name: Upload release binaries
+        uses: alexellis/upload-assets@0.4.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          asset_paths: '["./target/release/sgo-*"]'
