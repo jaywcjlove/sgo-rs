@@ -31,8 +31,5 @@ jobs:
           with:
             toolchain: ${{ matrix.rust }}
 
-        - name: Install cross
-          run: cargo install cross
-
-        - name: Build with cross
+        - name: Build
           run: cargo build --release
