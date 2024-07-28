@@ -71,9 +71,10 @@ jobs:
       - name: Read Version
         run: |
           echo "Commit message 1: ${{ github.event.client_payload.version }}"
-          
+
       - name: Upload sgo-${{ matrix.target }}
         uses: jaywcjlove/github-action-upload-assets@main
         continue-on-error: true
         with:
+          tag: ${{ github.event.client_payload.version }}
           asset-path: '["./target/release/sgo-*"]'
