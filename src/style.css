@@ -31,7 +31,7 @@ ul a:hover {
 }
 
 ul a:hover::before {
-  background: #89afd43d;
+  background: #9dcfff91;
 }
 
 ul a::before {

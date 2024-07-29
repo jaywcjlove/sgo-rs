@@ -20,7 +20,6 @@ pub async fn serve_files(
     // 转换 Cow<str> 为 &str
     let decoded_path = decoded_path_str.as_ref();
     let full_path = Path::new(&**base_dir).join(decoded_path);
-    let full_path_clone = full_path.clone();
 
     let response = if full_path.is_dir() {
         match fs::read_dir(full_path).await {
@@ -78,12 +77,16 @@ pub async fn serve_files(
             }
         }
     } else {
-        match fs::read(full_path).await {
+        match fs::read(full_path.clone()).await {
             Ok(content) => {
-                let mime_type: mime::Mime = mime_guess::from_path(&full_path_clone).first_or_octet_stream();
-                if mime_type == mime::TEXT_HTML || mime_type == mime::TEXT_PLAIN || mime_type == mime::TEXT_CSS || mime_type == mime::TEXT_JAVASCRIPT {
+                let mut mime_type: mime::Mime = mime_guess::from_path(full_path).first_or_octet_stream();
+                if mime_type.to_string().starts_with("text/") || mime_type == mime::APPLICATION_JSON || mime_type == mime::APPLICATION_OCTET_STREAM {
                     let content_str = String::from_utf8_lossy(&content).to_string();
-                    warp::reply::with_header(content_str, "Content-Type", mime_type.to_string()).into_response()
+                    // 如果 MIME 类型是 application/octet-stream，且内容是文本，则更改为 text/plain
+                    if mime_type == mime::APPLICATION_OCTET_STREAM && std::str::from_utf8(&content).is_ok() {
+                        mime_type = mime::TEXT_PLAIN;
+                    }
+                    warp::reply::with_header(content_str, "Content-Type", &format!("{}; charset=utf-8", mime_type.to_string())).into_response()
                 } else {
                     warp::reply::with_header(content, "Content-Type", mime_type.to_string()).into_response()
                 }
@@ -94,9 +97,11 @@ pub async fn serve_files(
             }
         }
     };
-
     let response = if enable_cors {
-        warp::reply::with_header(response, "Access-Control-Allow-Origin", "*").into_response()
+        let response = warp::reply::with_header(response, "Access-Control-Allow-Origin", "*");
+        let response = warp::reply::with_header(response, "Access-Control-Allow-Headers", "*");
+        let response = warp::reply::with_header(response, "Access-Control-Allow-Credentials", "true");
+        warp::reply::with_header(response, "Access-Control-Allow-Private-Network", "true").into_response()
     } else {
         response
     };
