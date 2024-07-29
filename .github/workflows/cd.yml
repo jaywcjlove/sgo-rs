@@ -69,14 +69,14 @@ jobs:
         if: runner.os == 'Windows'
         run: choco install zip
         shell: pwsh
+
+      - name: Create zip file on Windows
+        if: runner.os == 'Windows'
+        run: powershell -command "Compress-Archive -Path 'target/release/sgo.exe' -DestinationPath 'sgo-${{ matrix.target }}.zip'"
   
-      - name: Create zip file
-        run: |
-          if [[ $RUNNER_OS == 'Windows' ]]; then
-            powershell -command "Compress-Archive -Path 'target/release/sgo.exe' -DestinationPath './sgo-${{ matrix.target }}.zip'"
-          else
-            zip -j sgo-${{ matrix.target }}.zip target/release/sgo
-          fi
+      - name: Create zip file on Unix
+        if: runner.os != 'Windows'
+        run: zip -j sgo-${{ matrix.target }}.zip target/release/sgo
 
       - name: Read Version
         run: |
