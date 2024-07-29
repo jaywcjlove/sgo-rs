@@ -68,6 +68,6 @@ ul a.file.gif::before,ul a.file.jpg::before,ul a.file.png::before,ul a.file.svg:
     font-size: 13px;
   }
   ul a {
-    padding: 10px 5px;
+    padding: 6px 5px;
   }
 }
