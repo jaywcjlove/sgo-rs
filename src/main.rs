@@ -48,15 +48,6 @@ async fn main() {
             }
         });
 
-        // // Create CORS filter
-        // let cors_filter = warp::reply::with_header(ACCESS_CONTROL_ALLOW_ORIGIN, HeaderValue::from_static("*"));
-        // // Apply CORS filter conditionally
-        // let route = if enable_cors {
-        //     route.with(cors_filter)
-        // } else {
-        //     route
-        // };
-
     // 打印服务器启动信息
     println!(
         "Starting server at http://{}:{}",
