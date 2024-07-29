@@ -30,6 +30,7 @@ pub async fn serve_files(
 
               let mut list = String::new();
               list.push_str("<meta content=\"width=device-width,initial-scale=1.0,minimum-scale=1.0,shrink-to-fit=no\" name=\"viewport\">");
+              list.push_str(&format!("<title>Files within {}</title>", relative_path));
               list.push_str(&format!("<style>{}</style>", css_content));
               list.push_str(&format!("<h1><i>Index of&nbsp;</i>{}</h1><ul>", relative_path));
 

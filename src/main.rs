@@ -29,7 +29,7 @@ async fn main() {
     let css_content_str = String::from_utf8_lossy(css_content);
     // 将内容转换为 String 并包装到 Arc
     let css_content_arc = Arc::new(css_content_str.to_string());
-    // 创建路由
+    // MARK: 创建路由
     let route = warp::path::tail()
         .and(warp::method())
         .and_then({
@@ -55,7 +55,7 @@ async fn main() {
         address.1.to_string().on_blue()
     );
 
-    // 启动服务器
+    // MARK: 启动服务器
     warp::serve(route).run(address).await;
 
 }
