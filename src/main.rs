@@ -12,6 +12,7 @@ async fn main() {
     let matches = cli::get_matches();
 
     // 读取命令行参数
+    let enable_cors = matches.get_flag("cors");
     let no_request_logging = matches.get_flag("no-request-logging");
     let base_dir = Arc::new(matches.get_one::<String>("dir").unwrap().to_string());
     let port: u16 = matches
@@ -43,9 +44,18 @@ async fn main() {
                         if path.as_str().is_empty() { "/".green() } else { path.as_str().green() }
                     );
                 }
-                file_server::serve_files(path, css_content_arc.clone(), base_dir.clone())
+                file_server::serve_files(path, css_content_arc.clone(), base_dir.clone(), enable_cors.clone())
             }
         });
+
+        // // Create CORS filter
+        // let cors_filter = warp::reply::with_header(ACCESS_CONTROL_ALLOW_ORIGIN, HeaderValue::from_static("*"));
+        // // Apply CORS filter conditionally
+        // let route = if enable_cors {
+        //     route.with(cors_filter)
+        // } else {
+        //     route
+        // };
 
     // 打印服务器启动信息
     println!(

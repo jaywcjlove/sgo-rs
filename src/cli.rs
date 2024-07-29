@@ -22,10 +22,17 @@ pub fn get_matches() -> ArgMatches {
       )
       .arg(
           Arg::new("no-request-logging")
+            .short('L')
             .long("no-request-logging")
-            .value_name("LOGGING")
             .help("Do not log any request information to the console")
             .action(clap::ArgAction::SetTrue), // Define as a flag that sets the value to false
+      )
+      .arg(
+          Arg::new("cors")
+              .short('C')
+              .long("cors")
+              .help("Enable CORS, sets `Access-Control-Allow-Origin` to `*`")
+              .action(clap::ArgAction::SetTrue),
       )
       .get_matches()
 }

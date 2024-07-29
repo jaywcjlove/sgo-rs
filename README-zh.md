@@ -17,17 +17,18 @@ sgo
 sgo -d target -p 3001
 ```
 
-
 ### Command help
 
 ```sh
 Usage: sgo [OPTIONS]
 
 Options:
-  -d, --dir <DIRECTORY>  Sets the directory to serve files from [default: ./static]
-  -p, --port <PORT>      Sets the port number to listen on [default: 3030]
-  -h, --help             Print help
-  -V, --version          Print version
+  -d, --dir <DIRECTORY>     Sets the directory to serve files from [default: ./static]
+  -p, --port <PORT>         Sets the port number to listen on [default: 3030]
+  -L, --no-request-logging  Do not log any request information to the console
+  -C, --cors                Enable CORS, sets `Access-Control-Allow-Origin` to `*`
+  -h, --help                Print help
+  -V, --version             Print version
 ```
 
 <br />
