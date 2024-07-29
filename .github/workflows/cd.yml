@@ -82,9 +82,15 @@ jobs:
         run: |
           echo "Commit message 1: ${{ github.event.client_payload.version }}"
 
+      - name: Print Folder Tree
+        uses: jaywcjlove/github-action-folder-tree@main
+        with:
+          exclude: ".git|.github|.husky|src"
+          depth: 3
+  
       - name: Upload sgo-${{ matrix.target }}
         uses: jaywcjlove/github-action-upload-assets@main
         continue-on-error: true
         with:
           tag: ${{ github.event.client_payload.version }}
-          asset-path: '["./target/release/sgo-*"]'
+          asset-path: '["./sgo-*"]'
