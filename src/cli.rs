@@ -1,9 +1,13 @@
+use colored::Colorize;
 use clap::{Arg, Command, ArgMatches};
 
 pub fn get_matches() -> ArgMatches {
   Command::new("Static File Server")
       .version("1.0")
-      .about("Serves static files")
+      .about(&format!(
+          "{} - Static file serving and directory listing",
+          "\nsgo".blue().bold()
+      ))
       .arg(
           Arg::new("dir")
             .short('d')

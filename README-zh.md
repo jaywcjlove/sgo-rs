@@ -20,6 +20,10 @@ sgo -d target -p 3001
 ### Command help
 
 ```sh
+$ sgo --help
+
+sgo - Static file serving and directory listing
+
 Usage: sgo [OPTIONS]
 
 Options:
