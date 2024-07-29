@@ -10,3 +10,4 @@ colored = "2" # 用于输出彩色日志
 clap = "4.1"  # 解析命令行参数
 mime_guess = "2.0" # 用于猜测文件的 MIME 类型
 tokio-stream = { version = "0.1", features = ["fs"] }
+percent-encoding = "2.1" # URL 编码

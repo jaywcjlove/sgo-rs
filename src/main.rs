@@ -2,6 +2,7 @@ use colored::Colorize;
 use warp::Filter;
 use warp::http::Method;
 use std::sync::Arc;
+use percent_encoding::percent_decode_str;
 
 mod file_server; 
 mod cli;
@@ -37,11 +38,13 @@ async fn main() {
             let css_content_arc = css_content_arc.clone();
             move |path: warp::path::Tail, method: Method| {
                 if !no_request_logging {
+                    // 解码路径
+                   let request_url = percent_decode_str(path.as_str()).decode_utf8_lossy();
                     // 打印请求方法
                     println!("{}: {} {}",
                         " HTTP ".on_blue().white().bold(),
                         method.to_string().green(), 
-                        if path.as_str().is_empty() { "/".green() } else { path.as_str().green() }
+                        if path.as_str().is_empty() { "/".green() } else { request_url.to_string().green() }
                     );
                 }
                 file_server::serve_files(path, css_content_arc.clone(), base_dir.clone(), enable_cors.clone())

@@ -5,6 +5,7 @@ use warp::Reply;
 use std::sync::Arc;
 use tokio_stream::wrappers::ReadDirStream;
 use tokio_stream::StreamExt;
+use percent_encoding::percent_decode_str;
 use mime_guess::mime;
 
 pub async fn serve_files(
@@ -14,14 +15,16 @@ pub async fn serve_files(
     enable_cors: bool,
 ) -> Result<warp::reply::Response, Infallible> {
     let path_str = path.as_str();
-
-    let full_path = Path::new(&**base_dir).join(path_str);
-    let full_path_clone = full_path.clone(); // 克隆 PathBuf
+    // 解码路径
+    let decoded_path_str = percent_decode_str(path_str).decode_utf8_lossy();
+    // 转换 Cow<str> 为 &str
+    let decoded_path = decoded_path_str.as_ref();
+    let full_path = Path::new(&**base_dir).join(decoded_path);
+    let full_path_clone = full_path.clone();
 
     let response = if full_path.is_dir() {
         match fs::read_dir(full_path).await {
             Ok(entries) => {
-
                 let mut dir_stream = ReadDirStream::new(entries);
                 let mut entries_vec: Vec<_> = Vec::new();
                 while let Some(entry) = dir_stream.next().await {
@@ -30,10 +33,10 @@ pub async fn serve_files(
                         Err(e) => eprintln!("Error reading entry: {}", e),
                     }
                 }
-                
                 // Sort the entries
                 entries_vec.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
-                let relative_path: String = Path::new(path_str).to_str().unwrap_or(&base_dir).to_string();
+
+                let relative_path: String = Path::new(decoded_path).to_str().unwrap_or(&base_dir).to_string();
                 
                 // 检查 relative_path 是否为空
                 let relative_path = if relative_path.is_empty() {
