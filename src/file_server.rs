@@ -8,6 +8,8 @@ use tokio_stream::StreamExt;
 use percent_encoding::percent_decode_str;
 use mime_guess::mime;
 
+use std::ffi::OsStr;
+
 pub async fn serve_files(
     path: warp::path::Tail,
     css_content: Arc<String>,
@@ -35,24 +37,26 @@ pub async fn serve_files(
                 // Sort the entries
                 entries_vec.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
 
-                let relative_path: String = Path::new(decoded_path).to_str().unwrap_or(&base_dir).to_string();
+                // 调用异步方法并获取结果
+                let project_dir_name = get_parent_dir_name(&**base_dir).await;
+                let relative_path: String = Path::new(decoded_path).to_str().unwrap_or("").to_string();
                 
                 // 检查 relative_path 是否为空
                 let relative_path = if relative_path.is_empty() {
-                    base_dir.to_string()
+                    "".to_string()
                 } else {
                     relative_path
                 };
-
+            
                 let mut list = String::new();
                 list.push_str("<meta content=\"width=device-width,initial-scale=1.0,minimum-scale=1.0,shrink-to-fit=no\" name=\"viewport\">");
                 list.push_str(&format!("<title>Files within {}</title>", relative_path));
                 list.push_str(&format!("<style>{}</style>", css_content));
-                list.push_str(&format!("<h1><i>Index of&nbsp;</i>{}</h1><ul>", relative_path));
+                list.push_str(&format!("<h1><i>Index of&nbsp;</i>{}/{}</h1><ul>", project_dir_name, relative_path));
 
                 // 添加返回上一级目录的链接（如果不是根目录）
                 if !path_str.is_empty() {
-                    let parent_path = Path::new(path_str).parent().unwrap_or(Path::new(&**base_dir)).to_str().unwrap();
+                    let parent_path: &str = Path::new(path_str).parent().unwrap_or(Path::new(&**base_dir)).to_str().unwrap();
                     list.push_str(&format!("<li><a class=\"folder\" href=\"/{}\">../</a></li>", parent_path));
                 }
 
@@ -80,20 +84,21 @@ pub async fn serve_files(
         match fs::read(full_path.clone()).await {
             Ok(content) => {
                 let mut mime_type: mime::Mime = mime_guess::from_path(full_path).first_or_octet_stream();
-                if mime_type.to_string().starts_with("text/") || mime_type == mime::APPLICATION_JSON || mime_type == mime::APPLICATION_OCTET_STREAM {
+                if mime_type == mime::APPLICATION_OCTET_STREAM && std::str::from_utf8(&content).is_ok() {
+                    mime_type = mime::TEXT_PLAIN;
+                }
+                let is_text = mime_type.to_string().starts_with("text/") || mime_type == mime::APPLICATION_JSON;
+                let response = if is_text == true {
                     let content_str = String::from_utf8_lossy(&content).to_string();
-                    // 如果 MIME 类型是 application/octet-stream，且内容是文本，则更改为 text/plain
-                    if mime_type == mime::APPLICATION_OCTET_STREAM && std::str::from_utf8(&content).is_ok() {
-                        mime_type = mime::TEXT_PLAIN;
-                    }
                     warp::reply::with_header(content_str, "Content-Type", &format!("{}; charset=utf-8", mime_type.to_string())).into_response()
                 } else {
                     warp::reply::with_header(content, "Content-Type", mime_type.to_string()).into_response()
-                }
+                };
+                response.into_response()
             }
             Err(_) => {
                 let error_message = "File not found".to_string();
-                warp::reply::html(error_message).into_response()
+                warp::reply::with_status(error_message, warp::http::StatusCode::NOT_FOUND).into_response()
             }
         }
     };
@@ -107,4 +112,16 @@ pub async fn serve_files(
     };
 
     Ok(response)
+}
+
+
+// MARK: - 获取父目录名称
+async fn get_parent_dir_name(base_dir: &str) -> String {
+    let current_dir = Path::new(base_dir);
+    match fs::canonicalize(current_dir).await {
+        Ok(parent_path) => {
+            parent_path.file_name().as_deref().unwrap_or_else(|| OsStr::new("")).to_string_lossy().to_string()
+        }
+        Err(_) => "/".to_string(), // 错误时返回默认值 "/"
+    }
 }
