@@ -1,7 +1,19 @@
 [English](./README.md) • <ruby> [sgo](https://github.com/jaywcjlove/sgo) <rt>Nodejs</rt></ruby>
 
-sgo
-===
+<p align="center">
+  <a href="https://github.com/jaywcjlove/sgo-rs">
+    <img alt="sgo logo" src="https://github.com/user-attachments/assets/ec07f2ce-03cd-4d04-ab1b-f0bf6cf6d334">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/jaywcjlove/sgo-rs/actions/workflows/ci.yml">
+    <img alt="CI" src="https://github.com/jaywcjlove/sgo-rs/actions/workflows/ci.yml/badge.svg">
+  </a>
+  <a href="https://github.com/jaywcjlove/sgo-rs/releases">
+    <img alt="Releases" src="https://img.shields.io/github/release/jaywcjlove/sgo-rs.svg">
+  </a>
+</p>
 
 这是一款工具，旨在帮助你为静态网站、单页应用程序或静态文件提供服务，无论它们是在你的设备上还是在本地网络上。它是 [sgo](https://github.com/jaywcjlove/sgo) 的 Rust 版本，并基于 Rust 重新编写。
 

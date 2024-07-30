@@ -1,7 +1,19 @@
 [简体中文](./README-zh.md) • <ruby> [sgo](https://github.com/jaywcjlove/sgo) <rt>Nodejs</rt></ruby>
 
-sgo
-===
+<p align="center">
+  <a href="https://github.com/jaywcjlove/sgo-rs">
+    <img alt="sgo logo" src="https://github.com/user-attachments/assets/ec07f2ce-03cd-4d04-ab1b-f0bf6cf6d334">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/jaywcjlove/sgo-rs/actions/workflows/ci.yml">
+    <img alt="CI" src="https://github.com/jaywcjlove/sgo-rs/actions/workflows/ci.yml/badge.svg">
+  </a>
+  <a href="https://github.com/jaywcjlove/sgo-rs/releases">
+    <img alt="Releases" src="https://img.shields.io/github/release/jaywcjlove/sgo-rs.svg">
+  </a>
+</p>
 
 This is a tool designed to help you serve static websites, single-page applications, or static files, whether they are on your device or on a local network. It is the Rust version of [sgo](https://github.com/jaywcjlove/sgo), rewritten in Rust.
 
