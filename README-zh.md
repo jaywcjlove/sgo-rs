@@ -1,4 +1,4 @@
-[English](./README.md) • <ruby> [sgo](./README-zh.md) <rt>Nodejs</rt></ruby>
+[English](./README.md) • <ruby> [sgo](https://github.com/jaywcjlove/sgo) <rt>Nodejs</rt></ruby>
 
 sgo
 ===
