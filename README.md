@@ -57,6 +57,10 @@ Options:
 cargo run   # Run the server, open http://127.0.0.1:3030/ in the browser
 cargo build # Compile the project
 cargo build --release # Compile the release version
+
+cargo build --target aarch64-apple-darwin --release
+cargo build --target aarch64-apple-ios --release
+cargo build --target aarch64-apple-ios-sim --release
 ```
 
 Compilation output directory

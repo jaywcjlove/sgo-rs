@@ -55,6 +55,10 @@ Options:
 cargo run   # 运行服务器，在浏览器中打开 http://127.0.0.1:3030/
 cargo build # 编译项目
 cargo build --release # 编译输出发布版本
+
+cargo build --target aarch64-apple-darwin --release
+cargo build --target aarch64-apple-ios --release
+cargo build --target aarch64-apple-ios-sim --release
 ```
 
 编译输出目录

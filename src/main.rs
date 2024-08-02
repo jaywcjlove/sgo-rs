@@ -3,9 +3,12 @@ use warp::Filter;
 use warp::http::Method;
 use std::sync::Arc;
 use percent_encoding::percent_decode_str;
+use tokio::sync::oneshot;
+use tokio::signal::ctrl_c;
 
 mod file_server; 
 mod cli;
+mod utils;
 
 #[tokio::main]
 async fn main() {
@@ -21,7 +24,11 @@ async fn main() {
         .unwrap()
         .parse()
         .unwrap_or(3030);
-        
+
+    if let Err(err) = utils::manage_port(port).await {
+        eprintln!("  Failed to manage port {}: {}", port, err.to_string().red());
+    }
+
     // 设置监听的 IP 和端口
     let address = ([127, 0, 0, 1], port);
     // 将 CSS 文件内容嵌入到二进制中
@@ -51,14 +58,25 @@ async fn main() {
             }
         });
 
-    // 打印服务器启动信息
-    println!(
-        "Starting server at http://{}:{}",
-        address.0.iter().map(|b| b.to_string()).collect::<Vec<_>>().join(".").on_blue(),
-        address.1.to_string().on_blue()
-    );
+    // 创建一个通道，用于发送和接收关闭信号
+    let (shutdown_tx, shutdown_rx) = oneshot::channel::<()>();
 
-    // MARK: 启动服务器
-    warp::serve(route).run(address).await;
+    // 创建服务器并绑定地址，同时启动优雅关闭
+    let (server_addr, server) = warp::serve(route)
+        .bind_with_graceful_shutdown(address, async {
+            shutdown_rx.await.ok();
+        });
+
+    println!("\n  Server running on {}{}\n", "http://".on_blue(), server_addr.to_string().on_blue());
+    // 启动服务器
+    tokio::spawn(server);
+
+    // 捕捉 CTRL+C 信号
+    ctrl_c().await.expect(&"failed to listen for event".to_string().as_str().red());
+
+    // 发送关闭信号
+    let _ = shutdown_tx.send(());
+
+    println!("{}", "\n\n  Server has been shutdown gracefully\n\n".yellow());
 
 }
