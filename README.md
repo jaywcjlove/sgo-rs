@@ -23,6 +23,16 @@ Additionally, it provides a neat interface for listing directory contents:
 
 <br />
 
+### Installation
+
+```bash
+brew install jaywcjlove/tap/sgo
+# Uninstall
+brew uninstall jaywcjlove/tap/sgo
+```
+
+<br />
+
 ### Usage
 
 ```sh

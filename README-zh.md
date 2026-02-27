@@ -23,6 +23,16 @@
 
 <br />
 
+### 安装
+
+```bash
+brew install jaywcjlove/tap/sgo
+# 卸载
+brew uninstall jaywcjlove/tap/sgo
+```
+
+<br />
+
 ### 使用
 
 ```sh
