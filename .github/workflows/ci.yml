@@ -22,7 +22,7 @@ jobs:
         rust: [1.83.0, stable, beta, nightly]
     steps:
         - name: Checkout repository
-          uses: actions/checkout@v4
+          uses: actions/checkout@v6
 
         - name: Save commit message to environment variable
           run: |
