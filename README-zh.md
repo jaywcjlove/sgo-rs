@@ -44,6 +44,8 @@
 </p>
 
 <p align="center">
+  <a href="https://jaywcjlove.github.io/#/sponsor"><img alt="Buy me a coffee" src="https://img.shields.io/badge/Buy_Me_a_Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black"></a>
+  <a href="https://x.com/jaywcjlove"><img alt="Follow On X" src="https://img.shields.io/badge/Follow%20on%20X-333333?logo=x&logoColor=white"></a>
   <a href="https://github.com/jaywcjlove/sgo-rs/actions/workflows/ci.yml">
     <img alt="CI" src="https://github.com/jaywcjlove/sgo-rs/actions/workflows/ci.yml/badge.svg">
   </a>
