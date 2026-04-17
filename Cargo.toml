@@ -12,11 +12,5 @@ clap = "4.1"  # 解析命令行参数
 mime_guess = "2.0" # 用于猜测文件的 MIME 类型
 tokio-stream = { version = "0.1", features = ["fs"] }
 percent-encoding = "2.1" # URL 编码
-# Pin ICU4X transitive deps so CI keeps working on rustc 1.85.0.
-icu_collections = "=2.0.0"
-icu_locale_core = "=2.0.0"
-icu_normalizer = "=2.0.0"
-icu_normalizer_data = "=2.0.0"
-icu_properties = "=2.0.0"
-icu_properties_data = "=2.0.0"
-icu_provider = "=2.0.0"
+# Force the lower-MSRV unicode-rs backend for idna on rustc 1.85.0.
+idna_adapter = "=1.1.0"
