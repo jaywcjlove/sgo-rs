@@ -13,10 +13,10 @@ mime_guess = "2.0" # 用于猜测文件的 MIME 类型
 tokio-stream = { version = "0.1", features = ["fs"] }
 percent-encoding = "2.1" # URL 编码
 # Pin ICU4X transitive deps so CI keeps working on rustc 1.85.0.
-icu_collections = { version = "=2.0.0", default-features = false }
+icu_collections = "=2.0.0"
 icu_locale_core = "=2.0.0"
-icu_normalizer = { version = "=2.0.0", default-features = false }
+icu_normalizer = "=2.0.0"
 icu_normalizer_data = "=2.0.0"
-icu_properties = { version = "=2.0.0", default-features = false }
+icu_properties = "=2.0.0"
 icu_properties_data = "=2.0.0"
-icu_provider = { version = "=2.0.0", default-features = false }
+icu_provider = "=2.0.0"
